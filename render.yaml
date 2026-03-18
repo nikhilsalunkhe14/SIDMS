@@ -1,0 +1,25 @@
+services:
+  # Frontend Service (React)
+  - type: web
+    name: sidms-frontend
+    env: node
+    buildCommand: cd sidms-frontend && npm install && npm run build
+    startCommand: cd sidms-frontend && npm start
+    staticPublishPath: ./sidms-frontend/dist
+    envVars:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
+    
+  # Backend Service (Python Flask)
+  - type: web
+    name: sidms-backend
+    env: python
+    buildCommand: cd sidms-python-backend && pip install -r requirements-vercel.txt
+    startCommand: cd sidms-python-backend && python app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10
+      - key: PORT
+        value: 5000
+    healthCheckPath: /health
