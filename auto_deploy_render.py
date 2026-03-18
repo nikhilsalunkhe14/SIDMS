@@ -187,13 +187,13 @@ def provide_render_instructions():
 
 def create_quick_reference():
     """Create a quick reference file"""
-    reference_content = """# 🚀 Quick Render Deployment Reference
+    reference_content = """# Quick Render Deployment Reference
 
-## 🔗 Important URLs
-- **Render Dashboard**: https://dashboard.render.com
-- **Repository**: https://github.com/nikhilsalunkhe14/SIDMS
+## Important URLs
+- Render Dashboard: https://dashboard.render.com
+- Repository: https://github.com/nikhilsalunkhe14/SIDMS
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 ### Frontend Service (sidms-frontend)
 ```
@@ -208,12 +208,12 @@ JWT_ACCESS_TOKEN_EXPIRES_IN=3600
 ENCRYPTION_KEY=your-32-byte-encryption-key-here-very-secure
 ```
 
-## 🌐 Expected URLs After Deployment
-- **Frontend**: https://sidms-frontend.onrender.com
-- **Backend**: https://sidms-backend.onrender.com
-- **API Health**: https://sidms-backend.onrender.com/health
+## Expected URLs After Deployment
+- Frontend: https://sidms-frontend.onrender.com
+- Backend: https://sidms-backend.onrender.com
+- API Health: https://sidms-backend.onrender.com/health
 
-## 🔍 Testing Commands
+## Testing Commands
 ```bash
 # Test backend health
 curl https://sidms-backend.onrender.com/health
@@ -223,10 +223,10 @@ open https://sidms-frontend.onrender.com
 ```
 """
     
-    with open("QUICK_RENDER_REFERENCE.md", "w") as f:
+    with open("QUICK_RENDER_REFERENCE.md", "w", encoding='utf-8') as f:
         f.write(reference_content)
     
-    print("\n📄 Created: QUICK_RENDER_REFERENCE.md")
+    print("\nCreated: QUICK_RENDER_REFERENCE.md")
     return True
 
 def main():
