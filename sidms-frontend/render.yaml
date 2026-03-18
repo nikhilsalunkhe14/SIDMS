@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: sidms-frontend
+    buildCommand: npm run build
+    publishPath: dist
+    healthCheckPath: /
+    envVars:
+      - key: VITE_API_URL
+        value: https://your-backend-url.onrender.com

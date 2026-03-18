@@ -10,10 +10,10 @@ function VerifyEmail() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = searchParams.get("token");
+        const user_id = searchParams.get("user_id");
 
-        if (!token) {
-            setMessage("Invalid verification link. No token provided.");
+        if (!user_id) {
+            setMessage("Invalid verification link. No user ID provided.");
             setMessageType("error");
             setVerifying(false);
             return;
@@ -22,7 +22,12 @@ function VerifyEmail() {
         const verify = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:8080/api/auth/verify?token=${encodeURIComponent(token)}`
+                    "http://localhost:5000/api/auth/verify-email",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ user_id }),
+                    }
                 );
 
                 const data = await response.json();
@@ -38,7 +43,8 @@ function VerifyEmail() {
                     setMessage(data.message || "Verification failed. The link may be invalid or expired.");
                     setMessageType("error");
                 }
-            } catch {
+            } catch (error) {
+                console.error("Verification error:", error);
                 setMessage("Unable to reach the server. Please try again later.");
                 setMessageType("error");
             } finally {

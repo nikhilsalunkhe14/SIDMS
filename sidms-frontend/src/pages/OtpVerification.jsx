@@ -40,7 +40,7 @@ function OtpVerification() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8080/api/auth/verify-otp", {
+            const response = await fetch("http://localhost:5000/api/auth/verify-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, otp }),
@@ -52,11 +52,11 @@ function OtpVerification() {
                 // Store auth data via AuthContext
                 login(data);
 
-                setMessage("Verification successful! Redirecting…");
+                setMessage("Verification successful! Redirecting to Profile Form…");
                 setMessageType("success");
 
                 setTimeout(() => {
-                    navigate("/dashboard");
+                    navigate("/profileform");
                 }, 1200);
             } else {
                 setMessage(data.message || "Invalid OTP. Please try again.");

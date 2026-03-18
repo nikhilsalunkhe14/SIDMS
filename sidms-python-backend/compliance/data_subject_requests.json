@@ -1,0 +1,15 @@
+[
+  {
+    "request_id": "DSR_20260312_090044_test_user",
+    "user_id": "test_user",
+    "request_type": "access",
+    "status": "pending",
+    "created_at": "2026-03-12T09:00:44.555443",
+    "details": {
+      "format": "json"
+    },
+    "processed_at": null,
+    "processed_by": null,
+    "notes": null
+  }
+]

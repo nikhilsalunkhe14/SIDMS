@@ -1,0 +1,32 @@
+{
+  "user_profiles": {
+    "retention_period_days": 2555,
+    "description": "Student profiles and academic data",
+    "gdpr_basis": "legitimate_interest",
+    "auto_delete": true
+  },
+  "audit_logs": {
+    "retention_period_days": 1095,
+    "description": "System audit logs and access records",
+    "gdpr_basis": "legal_obligation",
+    "auto_delete": true
+  },
+  "user_consents": {
+    "retention_period_days": 1825,
+    "description": "User consent records and preferences",
+    "gdpr_basis": "legal_obligation",
+    "auto_delete": false
+  },
+  "backup_data": {
+    "retention_period_days": 90,
+    "description": "System backup data",
+    "gdpr_basis": "legitimate_interest",
+    "auto_delete": true
+  },
+  "temp_data": {
+    "retention_period_days": 30,
+    "description": "Temporary session and cache data",
+    "gdpr_basis": "legitimate_interest",
+    "auto_delete": true
+  }
+}

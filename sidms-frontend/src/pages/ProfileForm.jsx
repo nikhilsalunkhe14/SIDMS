@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./ProfileForm.css";
 
@@ -18,35 +18,122 @@ function ProfileForm() {
         lastName: "",
         email: "",
         mobile: "",
-        college: "",
+        residentialAddress: "", // NEW: Residential address field
+        college: "", // College name field
         degree: "",
+        studentId: "", // Changed from governmentId to studentId
+        studentIdType: "college_id", // Changed from governmentIdType
     });
     const [skills, setSkills] = useState([]);
-    const [resume, setResume] = useState(null);
-    const [resumeName, setResumeName] = useState("");
+    const [resumeUrl, setResumeUrl] = useState(""); // Resume URL field
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
     const [loading, setLoading] = useState(false);
     const [skillsOpen, setSkillsOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false); // New state for editing mode
+
+    /* ── Load Existing Profile ─────────────────────── */
+    
+    useEffect(() => {
+        const loadExistingProfile = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await fetch("http://localhost:5000/api/members/me", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.profile) {
+                        // Profile exists - populate form for editing
+                        const profile = data.profile;
+                        const nameParts = profile.full_name ? profile.full_name.trim().split(/\s+/) : ['', ''];
+                        
+                        setForm({
+                            firstName: nameParts[0] || '',
+                            lastName: nameParts.slice(1).join(' ') || '',
+                            email: profile.email || '',
+                            mobile: profile.phone_number || '',
+                            residentialAddress: profile.residential_address || '', // NEW field
+                            college: profile.college_name || '', // Updated to use college_name
+                            degree: profile.degree || '',
+                            studentId: profile.student_id || '',
+                            studentIdType: profile.student_id_type || 'college_id'
+                        });
+                        
+                        setResumeUrl(profile.resume_url || '');
+                        setIsEditing(true);
+                    }
+                    // If no profile, stay in create mode
+                } else if (response.status !== 404) {
+                    // Handle other errors
+                    console.error('Error checking profile:', response.status);
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        };
+
+        loadExistingProfile();
+    }, []);
 
     /* ── Handlers ──────────────────────────────── */
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        
+        // Handle student ID formatting based on type
+        if (name === 'studentId') {
+            const idType = form.studentIdType;
+            let formatted = value;
+            
+            switch (idType) {
+                case 'college_id':
+                    // Format as CLG123456 or similar
+                    const cleanCollegeId = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    formatted = cleanCollegeId;
+                    break;
+                case 'enrollment_number':
+                    // Format as ENR1234567890
+                    const cleanEnrollment = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    formatted = cleanEnrollment;
+                    break;
+                case 'roll_number':
+                    // Format as ROLL123456
+                    const cleanRoll = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    formatted = cleanRoll;
+                    break;
+                case 'prn_number':
+                    // Format as PRN12345678
+                    const cleanPRN = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    formatted = cleanPRN;
+                    break;
+                case 'application_id':
+                    // Format as APP2024001
+                    const cleanApp = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    formatted = cleanApp;
+                    break;
+                default:
+                    // No special formatting for other types
+                    formatted = value;
+            }
+            
+            setForm({ ...form, [name]: formatted });
+        } else if (name === 'studentIdType') {
+            // Clear ID when type changes
+            setForm({ ...form, [name]: value, studentId: '' });
+        } else {
+            setForm({ ...form, [name]: value });
+        }
     };
 
     const toggleSkill = (skill) => {
         setSkills((prev) =>
             prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
         );
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setResume(file);
-            setResumeName(file.name);
-        }
     };
 
     const handleSubmit = async (e) => {
@@ -57,15 +144,22 @@ function ProfileForm() {
 
         try {
             const payload = {
-                fullName: `${form.firstName} ${form.lastName}`.trim(),
+                full_name: `${form.firstName} ${form.lastName}`,
                 email: form.email,
-                phoneNumber: form.mobile,
-                address: form.college,
-                resumeUrl: form.degree,
+                phone_number: form.mobile,
+                residential_address: form.residentialAddress, // NEW field
+                college_name: form.college, // Updated field name
+                degree: form.degree,
+                resume_url: resumeUrl, // Use the resume URL field
+                student_id: form.studentId, // Use actual student ID from form
             };
 
-            const response = await fetch("http://localhost:8080/api/members/me", {
-                method: "POST",
+            // Use PUT method for updating, POST for creating
+            const method = isEditing ? "PUT" : "POST";
+            const url = "http://localhost:5000/api/members/me";
+
+            const response = await fetch(url, {
+                method: method,
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -74,16 +168,32 @@ function ProfileForm() {
             });
 
             if (response.ok) {
-                setMessage("Profile saved successfully. Redirecting to dashboard…");
+                const data = await response.json();
+                setMessage(
+                    isEditing 
+                        ? "Profile updated successfully!" 
+                        : "Profile created successfully!"
+                );
                 setMessageType("success");
-                setTimeout(() => navigate("/dashboard"), 1500);
+
+                // Redirect to dashboard after successful submission
+                setTimeout(() => {
+                    navigate("/dashboard");
+                }, 1500);
             } else {
-                const data = await response.json().catch(() => ({}));
-                setMessage(data.message || "Failed to save profile. Please try again.");
+                const errorData = await response.json();
+                setMessage(
+                    errorData.message || 
+                    (isEditing ? "Failed to update profile." : "Failed to create profile.")
+                );
                 setMessageType("error");
             }
-        } catch {
-            setMessage("Unable to reach the server. Please try again later.");
+        } catch (error) {
+            setMessage(
+                isEditing 
+                    ? "Unable to update profile. Please try again later."
+                    : "Unable to create profile. Please try again later."
+            );
             setMessageType("error");
         } finally {
             setLoading(false);
@@ -96,8 +206,8 @@ function ProfileForm() {
                 {/* Header */}
                 <div className="profile-header">
                     <div className="profile-header-icon">📋</div>
-                    <h1>Profile Application</h1>
-                    <p>Complete your internship profile details below</p>
+                    <h1>{isEditing ? "Edit Profile" : "Profile Application"}</h1>
+                    <p>{isEditing ? "Update your internship profile details below" : "Complete your internship profile details below"}</p>
                 </div>
 
                 <form className="profile-form" onSubmit={handleSubmit}>
@@ -157,8 +267,20 @@ function ProfileForm() {
                         </div>
                     </div>
 
-                    {/* ── Education Row ─────────────────── */}
+                    {/* ── Address Row ───────────────────── */}
                     <div className="profile-row">
+                        <div className="form-group">
+                            <label htmlFor="residentialAddress">Residential Address</label>
+                            <input
+                                id="residentialAddress"
+                                name="residentialAddress"
+                                type="text"
+                                placeholder="123 Main St, Apt 4B, Mumbai, Maharashtra 400001"
+                                value={form.residentialAddress}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                         <div className="form-group">
                             <label htmlFor="college">College Name</label>
                             <input
@@ -171,6 +293,10 @@ function ProfileForm() {
                                 required
                             />
                         </div>
+                    </div>
+
+                    {/* ── Education Row ─────────────────── */}
+                    <div className="profile-row">
                         <div className="form-group">
                             <label htmlFor="degree">Degree</label>
                             <input
@@ -182,6 +308,9 @@ function ProfileForm() {
                                 onChange={handleChange}
                                 required
                             />
+                        </div>
+                        <div className="form-group">
+                            <div></div> {/* Empty div for layout balance */}
                         </div>
                     </div>
 
@@ -219,22 +348,107 @@ function ProfileForm() {
                         )}
                     </div>
 
-                    {/* ── Resume Upload ────────────────── */}
+                    {/* ── Student ID ───────────────────── */}
                     <div className="form-group">
-                        <label htmlFor="resume">Resume</label>
-                        <div className="file-upload-wrapper">
-                            <label className="file-upload-btn" htmlFor="resume">
-                                {resumeName || "Choose file…"}
-                            </label>
+                        <label htmlFor="studentIdType">Student ID Type (Optional)</label>
+                        <select
+                            id="studentIdType"
+                            name="studentIdType"
+                            value={form.studentIdType}
+                            onChange={handleChange}
+                            className="profile-input"
+                            style={{ marginBottom: '10px' }}
+                        >
+                            <option value="college_id">College ID</option>
+                            <option value="enrollment_number">Enrollment Number</option>
+                            <option value="roll_number">Roll Number</option>
+                            <option value="prn_number">PRN Number</option>
+                            <option value="application_id">Application ID</option>
+                            <option value="other">Other</option>
+                        </select>
+                        
+                        <label htmlFor="studentId" style={{ fontSize: '14px', fontWeight: 'normal' }}>
+                            {form.studentIdType === 'college_id' && 'College ID Number'}
+                            {form.studentIdType === 'enrollment_number' && 'Enrollment Number'}
+                            {form.studentIdType === 'roll_number' && 'Roll Number'}
+                            {form.studentIdType === 'prn_number' && 'PRN Number'}
+                            {form.studentIdType === 'application_id' && 'Application ID'}
+                            {form.studentIdType === 'other' && 'Student ID Number'}
+                        </label>
+                        <input
+                            id="studentId"
+                            type="text"
+                            placeholder={
+                                form.studentIdType === 'college_id' ? 'Enter College ID (e.g., CLG123456)' :
+                                form.studentIdType === 'enrollment_number' ? 'Enter Enrollment Number (e.g., ENR1234567890)' :
+                                form.studentIdType === 'roll_number' ? 'Enter Roll Number (e.g., ROLL123456)' :
+                                form.studentIdType === 'prn_number' ? 'Enter PRN Number (e.g., PRN12345678)' :
+                                form.studentIdType === 'application_id' ? 'Enter Application ID (e.g., APP2024001)' :
+                                'Enter Student ID Number'
+                            }
+                            value={form.studentId}
+                            onChange={handleChange}
+                            name="studentId"
+                            className="profile-input"
+                            maxLength={50}
+                        />
+                        <small style={{ color: '#666', fontSize: '12px', marginTop: '5px', display: 'block' }}>
+                            {form.studentIdType === 'college_id' && <><strong>College ID:</strong> Your institution-issued student ID<br/></>}
+                            {form.studentIdType === 'enrollment_number' && <><strong>Enrollment:</strong> University enrollment number<br/></>}
+                            {form.studentIdType === 'roll_number' && <><strong>Roll Number:</strong> Academic roll number<br/></>}
+                            {form.studentIdType === 'prn_number' && <><strong>PRN:</strong> Permanent Registration Number<br/></>}
+                            {form.studentIdType === 'application_id' && <><strong>Application ID:</strong> Application tracking ID<br/></>}
+                            {form.studentIdType === 'other' && <><strong>Other:</strong> Any student identification number<br/></>}
+                            This field is completely optional.
+                        </small>
+                    </div>
+
+                    {/* ── Resume Section ────────────────── */}
+                    <div className="form-group">
+                        <label>Resume</label>
+                        
+                        {/* Resume URL Input */}
+                        <div>
                             <input
-                                id="resume"
-                                type="file"
-                                accept=".pdf,.doc,.docx"
-                                onChange={handleFileChange}
-                                className="file-upload-input"
+                                type="url"
+                                placeholder="Paste your resume URL here (Google Docs, LinkedIn, Drive, etc.)"
+                                value={resumeUrl}
+                                onChange={(e) => setResumeUrl(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '5px',
+                                    fontSize: '14px'
+                                }}
                             />
-                            {resumeName && (
-                                <span className="file-upload-name">✓ {resumeName}</span>
+                            {resumeUrl && (
+                                <div style={{ marginTop: '10px' }}>
+                                    <small style={{ color: '#666', display: 'block', marginBottom: '5px' }}>
+                                        ✓ Resume URL added
+                                    </small>
+                                    <small style={{ color: '#888', fontSize: '11px', display: 'block' }}>
+                                        💡 Supported: Google Docs, LinkedIn Profile, Google Drive, Dropbox, Personal Website
+                                    </small>
+                                    <div style={{ marginTop: '8px' }}>
+                                        <a 
+                                            href={resumeUrl} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            style={{
+                                                color: '#007bff',
+                                                textDecoration: 'none',
+                                                fontSize: '12px',
+                                                border: '1px solid #007bff',
+                                                padding: '4px 8px',
+                                                borderRadius: '3px',
+                                                display: 'inline-block'
+                                            }}
+                                        >
+                                            🔗 Preview Resume Link
+                                        </a>
+                                    </div>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -250,7 +464,7 @@ function ProfileForm() {
                         className="profile-submit-btn"
                         disabled={loading}
                     >
-                        {loading ? "Saving…" : "Save Profile"}
+                        {loading ? "Saving…" : (isEditing ? "Update Profile" : "Save Profile")}
                     </button>
                 </form>
             </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./Login.css";
 
 function Login() {
@@ -9,6 +10,7 @@ function Login() {
     const [messageType, setMessageType] = useState(""); // "success" | "error"
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,7 +19,7 @@ function Login() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
+            const response = await fetch("http://localhost:5000/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password }),
@@ -26,13 +28,31 @@ function Login() {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage(data.message || "OTP sent to your registered email.");
-                setMessageType("success");
+                // Check if admin login (direct token)
+                if (data.token) {
+                    // Admin login - use AuthContext login method
+                    login({
+                        token: data.token,
+                        role: data.user.role,
+                        username: data.user.username
+                    });
+                    
+                    setMessage("Admin login successful!");
+                    setMessageType("success");
+                    
+                    setTimeout(() => {
+                        navigate("/admin-dashboard");
+                    }, 1000);
+                } else {
+                    // Regular user - OTP flow
+                    setMessage(data.message || "OTP sent to your registered email.");
+                    setMessageType("success");
 
-                // Redirect to OTP verification after a brief delay so user sees the message
-                setTimeout(() => {
-                    navigate("/otp", { state: { username } });
-                }, 1500);
+                    // Redirect to OTP verification after a brief delay so user sees the message
+                    setTimeout(() => {
+                        navigate("/otp", { state: { username } });
+                    }, 1500);
+                }
             } else {
                 setMessage(data.message || "Invalid credentials. Please try again.");
                 setMessageType("error");
@@ -96,6 +116,12 @@ function Login() {
                         {loading ? "Signing in…" : "Sign In"}
                     </button>
                 </form>
+
+                {/* Link to Register */}
+                <div className="register-footer">
+                    Don't have an account?{" "}
+                    <Link to="/register" className="register-link">Sign Up</Link>
+                </div>
             </div>
         </div>
     );

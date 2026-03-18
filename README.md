@@ -1,12 +1,12 @@
 # 🛡️ SIDMS — Secure IAC Data Management System
 
-[![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://python.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.3+-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**SIDMS** is a full-stack, production-grade **identity and profile management system** built with security at its core. It delivers enterprise-level features including email verification, OTP-based multi-factor authentication, JWT stateless sessions, role-based access control (RBAC), AES-256 field-level encryption, comprehensive audit logging, and secure key management through environment variables.
+**SIDMS** is an enterprise-grade **secure data management system** built with security at its core. It delivers advanced security features including AES-256 encryption, multi-factor authentication (MFA), comprehensive audit logging, secure key management, and full GDPR compliance for managing student academic profiles and administrative data.
 
 ---
 
@@ -15,31 +15,32 @@
 - [Project Overview](#-project-overview)
 - [Tech Stack](#-tech-stack)
 - [Architecture Overview](#-architecture-overview)
-- [Features](#-features)
 - [Security Features](#-security-features)
-- [Database Schema Overview](#-database-schema-overview)
+- [Compliance Features](#-compliance-features)
+- [Database Schema](#-database-schema)
 - [Setup Instructions](#-setup-instructions)
 - [Environment Variables](#-environment-variables)
 - [API Endpoints](#-api-endpoints)
-- [Folder Structure](#-folder-structure)
-- [Future Enhancements](#-future-enhancements)
+- [Project Structure](#-project-structure)
+- [Security Implementation](#-security-implementation)
 - [License](#-license)
 
 ---
 
 ## 🌐 Project Overview
 
-SIDMS (Secure IAC Data Management System) is a comprehensive identity and access management solution designed for organizations that require robust, enterprise-grade security for managing user identities and sensitive profile data.
+SIDMS (Secure IAC Data Management System) is a comprehensive, production-ready data management solution designed for organizations requiring enterprise-grade security, compliance, and audit capabilities for managing sensitive academic and administrative data.
 
-### Key Highlights
+### 🎯 Key Highlights
 
-- **Multi-Factor Authentication** — Two-step login with password verification followed by a one-time password (OTP) delivered via email.
-- **Email Verification** — Token-based email verification ensures only valid users can activate their accounts.
-- **JWT Stateless Sessions** — Industry-standard JSON Web Tokens for scalable, stateless authentication.
-- **Role-Based Access Control** — Fine-grained permissions with Admin, Manager, and Member roles.
-- **Field-Level Encryption** — AES-256-GCM encryption protects sensitive profile data at rest.
-- **Audit Trail** — Every security event is logged with user, action, status, IP address, and timestamp.
-- **Secure Key Management** — All secrets (AES keys, JWT secrets, SMTP credentials) are managed via environment variables — never hardcoded.
+- **🔐 Advanced Authentication** — JWT-based authentication with TOTP multi-factor authentication
+- **🛡️ AES-256 Encryption** — Field-level encryption for all sensitive data
+- **🔑 Secure Key Management** — Automated key rotation, backup, and versioning
+- **📋 GDPR Compliance** — Full compliance framework with data subject rights
+- **📊 Comprehensive Audit Trail** — Complete activity logging with IP tracking
+- **👥 Role-Based Access Control** — Fine-grained permissions for users and admins
+- **🔒 HTTPS Support** — SSL/TLS encryption for data in transit
+- **📱 MFA Ready** — TOTP-based 2FA with backup codes
 
 ---
 
@@ -49,190 +50,189 @@ SIDMS (Secure IAC Data Management System) is a comprehensive identity and access
 
 | Technology          | Version | Purpose                              |
 |---------------------|---------|--------------------------------------|
-| Java                | 21      | Core language                        |
-| Spring Boot         | 3.2.5   | Application framework                |
-| Spring Security     | 6.x     | Authentication & authorization       |
-| Spring Data JPA     | —       | ORM / data access (Hibernate)        |
-| MySQL               | 8.x     | Relational database                  |
-| JavaMailSender      | —       | Email dispatch (SMTP)                |
-| JJWT                | 0.12.5  | JWT creation & validation            |
-| BCrypt              | —       | Password hashing                     |
-| Lombok              | 1.18.42 | Boilerplate reduction                |
-| SpringDoc OpenAPI   | 2.3.0   | Swagger UI / API documentation       |
+| Python              | 3.10+   | Core language                        |
+| Flask               | 2.3+    | Web framework                       |
+| PyJWT              | 2.8+    | JWT authentication                  |
+| PyMongo             | 4.5+    | MongoDB driver                      |
+| PyOTP               | 2.9+    | TOTP-based MFA                     |
+| QRCode              | 8.2+    | QR code generation                  |
+| Cryptography        | 41.0+   | AES-256 encryption                 |
+| Flask-CORS          | 4.0+    | Cross-origin resource sharing        |
+| python-dotenv       | 1.0+    | Environment variable management       |
 
 ### Frontend
 
 | Technology          | Version | Purpose                              |
 |---------------------|---------|--------------------------------------|
-| React               | 19      | UI framework                         |
-| Vite                | 7.x     | Build tool & dev server              |
-| React Router DOM    | 7.x     | Client-side routing                  |
-| Context API         | —       | Global state management              |
-| Fetch API           | —       | HTTP client for API calls            |
+| React               | 18+     | UI framework                         |
+| Vite                | 4+      | Build tool & dev server              |
+| React Router DOM    | 6+      | Client-side routing                  |
+| Axios               | 1.3+    | HTTP client for API calls            |
+| CSS3                | —       | Styling with Grid/Flexbox           |
+
+### Database & Infrastructure
+
+| Technology          | Purpose                              |
+|---------------------|--------------------------------------|
+| MongoDB Atlas       | Cloud database (NoSQL)               |
+| JWT                | Stateless authentication tokens        |
+| TOTP               | Time-based one-time passwords         |
+| AES-256            | Symmetric encryption                 |
 
 ---
 
 ## 🏛️ Architecture Overview
 
-### Layered Architecture
-
-SIDMS follows a clean, layered separation of concerns:
+### Security-First Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     React Frontend                          │
-│  (Pages → Context API → Fetch API → REST Endpoints)        │
+│  (Pages → API Client → JWT/MFA → REST Endpoints)          │
 └──────────────────────────┬──────────────────────────────────┘
-                           │ HTTP (JSON)
+                           │ HTTPS (TLS 1.2+)
 ┌──────────────────────────▼──────────────────────────────────┐
-│                    Controller Layer                          │
-│  AuthController · MemberProfileController · AdminController │
+│                   Flask Backend                             │
+│  Auth Routes → MFA Routes → Admin Routes → Compliance       │
 ├─────────────────────────────────────────────────────────────┤
-│                     Service Layer                            │
-│  AuthService · MemberProfileService · OtpService            │
-│  EmailService · AuditLogService · VerificationTokenService  │
+│                   Security Layer                            │
+│  JWT Middleware → MFA Service → Encryption Service          │
 ├─────────────────────────────────────────────────────────────┤
-│                   Repository Layer (JPA)                     │
-│  UserRepository · OtpRepository · MemberProfileRepository   │
-│  AuditLogRepository · VerificationTokenRepository           │
+│                   Service Layer                             │
+│  Auth Service → Key Manager → Compliance Service           │
 ├─────────────────────────────────────────────────────────────┤
-│                     MySQL Database                           │
-│  users · otps · member_profiles · audit_logs                │
-│  verification_tokens                                        │
+│                 MongoDB Atlas Database                       │
+│  Users → Profiles → Audit Logs → Compliance Data            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Security & Authentication Flow
+### Authentication & MFA Flow
 
 ```
  ┌──────────┐     ┌─────────────────┐     ┌───────────┐     ┌─────────┐     ┌──────────────────┐
- │ Register │────▶│ Email Sent with │────▶│  Verify   │────▶│  Login  │────▶│  OTP Sent via    │
- │          │     │ Verification    │     │  Email    │     │ (Creds) │     │  Email           │
- └──────────┘     │ Token           │     └───────────┘     └─────────┘     └────────┬─────────┘
-                  └─────────────────┘                                                │
-                                                                                     ▼
-                                                                         ┌───────────────────┐
-     ┌──────────────────┐     ┌─────────────┐                            │  Verify OTP       │
-     │ Profile Complete │◀────│ JWT Issued  │◀───────────────────────────│  (Hashed Check)   │
-     │ (Encrypted Data) │     │ with Roles  │                            └───────────────────┘
-     └──────────────────┘     └─────────────┘
+ │ Login    │────▶│ Password Auth  │────▶│ MFA Check │────▶│ TOTP    │────▶│ Access Granted   │
+ │ (Creds)  │     │ (JWT Token)    │     │ Required? │     │ Verify  │     │ (Full Token)    │
+ └──────────┘     └─────────────────┘     └───────────┘     └─────────┘     └────────┬─────────┘
+                                                                                     │
+                                                                                 Backup Codes
 ```
 
-### Encryption Flow
+### Encryption & Key Management
 
 ```
-Plaintext Data ──▶ AES-256-GCM Encrypt ──▶ Base64 Encoded ──▶ Stored in DB
+Plaintext Data ──▶ AES-256 Encrypt ──▶ Base64 ──▶ Stored in MongoDB
                         │
-                   SIDMS_AES_KEY
-                  (env variable)
+                   Key Manager Service
+                  (Rotation + Backup)
 
-Stored Data ──▶ Base64 Decode ──▶ AES-256-GCM Decrypt ──▶ Plaintext Response
+Stored Data ──▶ Base64 Decode ──▶ AES-256 Decrypt ──▶ Plaintext Response
                         │
-                   SIDMS_AES_KEY
-                  (env variable)
+                   Current Key Version
 ```
-
----
-
-## ✨ Features
-
-| Feature                        | Description                                                         |
-|--------------------------------|---------------------------------------------------------------------|
-| **User Registration**          | New users register with username, email, and password               |
-| **Email Verification**         | Token-based verification link sent to the user's email              |
-| **Secure Login**               | Credential validation with BCrypt password comparison               |
-| **OTP via Email**              | 6-digit OTP sent to the user's registered email after login         |
-| **Hashed OTP Storage**         | OTPs are BCrypt-hashed before persistence — never stored in plain   |
-| **JWT Authentication**         | Stateless authentication with role-embedded JWT tokens              |
-| **Role-Based Route Protection**| Endpoints protected by `@PreAuthorize` with role checks             |
-| **Profile Completion**         | Members create and manage their encrypted profile data              |
-| **AES-256 Encryption**         | Sensitive fields (Aadhaar, PAN, phone) encrypted at the field level |
-| **Audit Logging**              | All security events recorded with user, action, IP, and timestamp   |
-| **Swagger UI**                 | Interactive API documentation at `/swagger-ui.html`                 |
 
 ---
 
 ## 🔒 Security Features
 
-### Password Security
-- **BCrypt hashing** with adaptive cost factor for all user passwords.
-- Passwords are never logged or returned in API responses.
+### 🔐 Authentication & Authorization
+- **JWT Authentication** — Stateless tokens with role claims
+- **TOTP-based MFA** — Time-based one-time passwords (Google Authenticator compatible)
+- **Role-Based Access Control** — Admin and user role separation
+- **Session Management** — Secure token handling and expiration
+- **Backup Codes** — Account recovery with one-time use codes
 
-### OTP Security
-- OTPs are **BCrypt-hashed** before storage — raw OTP is never persisted.
-- **5-minute expiry** enforced at the service layer.
-- Used OTPs are invalidated immediately after successful verification.
+### 🛡️ Data Protection
+- **AES-256 Encryption** — Field-level encryption for sensitive data
+- **Secure Key Management** — Key rotation, backup, and versioning
+- **TLS/SSL Support** — Encrypted data transmission
+- **Environment Variables** — No hardcoded secrets
+- **Input Validation** — Comprehensive input sanitization
 
-### Token Security
-- **JWT tokens** signed with HMAC-SHA256 using a configurable secret.
-- Tokens include role claims and have a configurable expiration (default: 1 hour).
-- Verification tokens are single-use and time-limited.
-
-### Data Protection
-- **AES-256-GCM** field-level encryption for sensitive profile data.
-- Encryption keys managed exclusively via environment variables.
-- Data is encrypted before persistence and decrypted on retrieval.
-
-### Access Control
-- **RBAC** enforced at the controller level with Spring Security's `@PreAuthorize`.
-- Three roles: `ROLE_ADMIN`, `ROLE_MANAGER`, `ROLE_MEMBER`.
-- Foreign key constraints ensure data integrity across all relationships.
-
-### Infrastructure Security
-- **CORS** configuration with configurable allowed origins.
-- Environment-based secret management — no credentials in source code.
-- Global exception handler prevents stack trace leakage to clients.
+### 📊 Audit & Monitoring
+- **Comprehensive Audit Trail** — All actions logged with user, IP, timestamp
+- **Security Headers** — XSS protection, content security policy
+- **Access Logging** — Detailed access attempt tracking
+- **Error Handling** — Secure error responses without information leakage
 
 ---
 
-## 🗄️ Database Schema Overview
+## 📋 Compliance Features
 
-```sql
-┌─────────────────────┐       ┌─────────────────────────┐
-│       users         │       │   verification_tokens   │
-├─────────────────────┤       ├─────────────────────────┤
-│ id (PK)             │◀──┐   │ id (PK)                 │
-│ username (UNIQUE)   │   │   │ token (UNIQUE)          │
-│ email (UNIQUE)      │   └───│ user_id (FK → users)    │
-│ password (hashed)   │       │ expiry_date             │
-│ role (ENUM)         │       │ used (BOOLEAN)           │
-│ enabled (BOOLEAN)   │       └─────────────────────────┘
-│ created_at          │
-└──────────┬──────────┘       ┌─────────────────────────┐
-           │                  │          otps           │
-           │                  ├─────────────────────────┤
-           ├──────────────────│ id (PK)                 │
-           │                  │ username                │
-           │                  │ otp_hash (BCrypt)       |
-           │                  │ expiry_time             │
-           │                  │ used (BOOLEAN)          │
-           │                  └─────────────────────────┘
-           │
-           │                  ┌─────────────────────────┐
-           │                  │    member_profiles      │
-           │                  ├─────────────────────────┤
-           ├──────────────────│ id (PK)                 │
-           │                  │ user_id (FK → users)    │
-           │                  │ full_name               │
-           │                  │ email (encrypted)       │
-           │                  │ phone (encrypted)       │
-           │                  │ aadhaar (encrypted)     │
-           │                  │ pan (encrypted)         │
-           │                  │ address                 │
-           │                  │ created_at / updated_at │
-           │                  └─────────────────────────┘
-           │
-           │                  ┌─────────────────────────┐
-           │                  │      audit_logs         │
-           │                  ├─────────────────────────┤
-           └──────────────────│ id (PK)                 │
-                              │ username                │
-                              │ action                  │
-                              │ status                  │
-                              │ ip_address              │
-                              │ details                 │
-                              │ timestamp               │
-                              └─────────────────────────┘
+### 🇪🇺 GDPR Compliance
+- **Data Subject Rights** — Access, portability, erasure, correction
+- **Consent Management** — Granular consent tracking and withdrawal
+- **Data Retention Policies** — Automated cleanup based on configurable policies
+- **Data Minimization** — Only collect necessary data
+- **Privacy by Design** — Built-in privacy controls
+
+### 📊 Compliance Tools
+- **Data Export** — GDPR-compliant data portability
+- **Automated Deletion** — Right to be forgotten implementation
+- **Consent Tracking** — Complete consent history
+- **Compliance Reporting** — Automated compliance status reports
+- **Audit Documentation** — Complete compliance audit trail
+
+---
+
+## 🗄️ Database Schema
+
+### MongoDB Collections
+
+```javascript
+// Users Collection
+{
+  _id: ObjectId,
+  username: String,
+  email: String,
+  password: String (BCrypt hashed),
+  role: String (ROLE_USER/ROLE_ADMIN),
+  created_at: Date,
+  updated_at: Date
+}
+
+// Member Profiles Collection
+{
+  _id: ObjectId,
+  user_id: String,
+  full_name: String (AES-256 encrypted),
+  email: String (AES-256 encrypted),
+  phone_number: String (AES-256 encrypted),
+  address: String (AES-256 encrypted),
+  student_id: String (AES-256 encrypted),
+  degree: String (AES-256 encrypted),
+  resume_url: String (AES-256 encrypted),
+  status: String,
+  created_at: Date,
+  updated_at: Date
+}
+
+// Audit Logs Collection
+{
+  _id: ObjectId,
+  user_id: String,
+  user_name: String,
+  action: String,
+  details: Object,
+  ip_address: String,
+  timestamp: Date
+}
+
+// User MFA Collection
+{
+  _id: ObjectId,
+  user_id: String,
+  secret: String,
+  enabled: Boolean,
+  enabled_at: Date,
+  backup_codes_generated: Boolean,
+  last_backup_generation: Date
+}
+
+// Compliance Data Collections
+{
+  // user_consents, data_subject_requests, 
+  // retention_policies, deletion_records
+}
 ```
 
 ---
@@ -241,218 +241,337 @@ Stored Data ──▶ Base64 Decode ──▶ AES-256-GCM Decrypt ──▶ Plai
 
 ### Prerequisites
 
-- **Java 21** — [Download](https://adoptium.net/)
-- **MySQL 8+** — [Download](https://dev.mysql.com/downloads/)
-- **Node.js 18+** — [Download](https://nodejs.org/) (for the frontend)
-- **Maven** — included via Maven Wrapper (`./mvnw`)
+- **Python 3.10+** — [Download](https://python.org/)
+- **Node.js 18+** — [Download](https://nodejs.org/)
+- **MongoDB Atlas Account** — [Sign up](https://www.mongodb.com/atlas)
+- **Git** — [Download](https://git-scm.com/)
 
-### 1. Clone the Repository
+### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/SIDMS.git
+git clone <repository-url>
 cd SIDMS
 ```
 
-### 2. Create the Database
-
-```sql
-CREATE DATABASE sidms_db;
-```
-
-### 3. Set Environment Variables
+### 2. Backend Setup
 
 ```bash
-# AES-256 Encryption Key (required for persistent encryption)
-export SIDMS_AES_KEY=$(openssl rand -base64 32)
+# Navigate to backend
+cd sidms-python-backend
 
-# Email / SMTP Credentials (required for OTP & verification emails)
-export SIDMS_MAIL_USERNAME="your-email@gmail.com"
-export SIDMS_MAIL_PASSWORD="your-gmail-app-password"
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# Linux/Mac:
+source venv/bin/activate
+
+# Install dependencies
+pip install Flask Flask-CORS PyJWT pymongo python-dotenv pyotp qrcode[pil] cryptography bcrypt
+
+# Create .env file
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-> [!IMPORTANT]
-> For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833), not your regular Gmail password.
-
-### 4. Run the Backend
+### 3. Frontend Setup
 
 ```bash
-./mvnw spring-boot:run
-```
-
-The API starts on **http://localhost:8080**.  
-Swagger UI is available at **http://localhost:8080/swagger-ui.html**.
-
-### 5. Run the Frontend
-
-```bash
+# Navigate to frontend
 cd sidms-frontend
+
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
 ```
 
-The frontend starts on **http://localhost:5173**.
+### 4. Environment Configuration
+
+Create `.env` file in `sidms-python-backend/`:
+
+```bash
+# Database
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/sidms
+
+# JWT Configuration
+JWT_SECRET_KEY=your-super-secret-jwt-key-here
+JWT_ACCESS_TOKEN_EXPIRES_IN=3600
+
+# Encryption
+ENCRYPTION_KEY=your-32-byte-encryption-key-here
+
+# Email (Optional - for OTP/verification)
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+```
+
+### 5. Run Applications
+
+**Backend:**
+```bash
+cd sidms-python-backend
+python app.py
+```
+Backend runs on **http://localhost:5000**
+
+**Frontend:**
+```bash
+cd sidms-frontend
+npm run dev
+```
+Frontend runs on **http://localhost:5173**
 
 ---
 
 ## 🔐 Environment Variables
 
-All secrets are injected via environment variables. **No credentials should ever be committed to version control.**
-
 | Variable              | Description                                      | Required | Default                    |
 |-----------------------|--------------------------------------------------|----------|----------------------------|
-| `SIDMS_AES_KEY`       | Base64-encoded 32-byte AES encryption key        | Yes*     | _(ephemeral if unset)_     |
-| `SIDMS_MAIL_USERNAME` | SMTP email address for sending OTP/verification  | Yes      | —                          |
-| `SIDMS_MAIL_PASSWORD` | SMTP email password (App Password for Gmail)     | Yes      | —                          |
-| `SIDMS_DB_USERNAME`   | MySQL database username                          | No       | `root`                     |
-| `SIDMS_DB_PASSWORD`   | MySQL database password                          | No       | `root`                     |
-| `SIDMS_JWT_SECRET`    | Base64-encoded JWT signing key                   | No       | _(default embedded key)_   |
-| `SIDMS_CORS_ORIGINS`  | Comma-separated allowed CORS origins             | No       | `http://localhost:5173`    |
-
-> **\*** If `SIDMS_AES_KEY` is not set, a random ephemeral key is generated at startup. Encrypted data will **not survive application restarts**.
-
-### Setting Environment Variables (macOS / Linux)
-
-**Temporary (current shell session):**
-
-```bash
-export SIDMS_AES_KEY="your-base64-key"
-export SIDMS_MAIL_USERNAME="your-email@gmail.com"
-export SIDMS_MAIL_PASSWORD="your-app-password"
-```
-
-**Persistent (add to `~/.zshrc` or `~/.bashrc`):**
-
-```bash
-echo 'export SIDMS_AES_KEY="your-base64-key"' >> ~/.zshrc
-echo 'export SIDMS_MAIL_USERNAME="your-email@gmail.com"' >> ~/.zshrc
-echo 'export SIDMS_MAIL_PASSWORD="your-app-password"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-### Generating an AES Key
-
-```bash
-openssl rand -base64 32
-```
+| `MONGODB_URI`        | MongoDB Atlas connection string                     | Yes      | —                          |
+| `JWT_SECRET_KEY`      | JWT signing secret key                           | Yes      | —                          |
+| `JWT_ACCESS_TOKEN_EXPIRES_IN` | JWT token expiration in seconds          | No       | `3600` (1 hour)           |
+| `ENCRYPTION_KEY`     | AES-256 encryption key (32 bytes)               | Yes      | —                          |
+| `SMTP_SERVER`        | SMTP server for emails                           | No       | —                          |
+| `SMTP_PORT`          | SMTP port                                      | No       | `587`                      |
+| `SMTP_USERNAME`      | SMTP username                                   | No       | —                          |
+| `SMTP_PASSWORD`      | SMTP password                                   | No       | —                          |
 
 ---
 
 ## 📡 API Endpoints
 
 ### Authentication (`/api/auth`) — Public
-
 | Method | Endpoint               | Description                                        |
 |--------|------------------------|----------------------------------------------------|
-| POST   | `/api/auth/register`   | Register a new user (account disabled until verified) |
-| GET    | `/api/auth/verify`     | Verify email via token (`?token=...`)              |
-| POST   | `/api/auth/login`      | Step 1 — Validate credentials, trigger OTP via email |
-| POST   | `/api/auth/verify-otp` | Step 2 — Submit OTP, receive JWT token             |
+| POST   | `/api/auth/login`      | User login with password and MFA                     |
+| POST   | `/api/auth/complete-mfa-login` | Complete MFA verification                  |
 
-### Member Profiles (`/api/members`) — Authenticated
+### Member Management (`/api/members`) — Authenticated
+| Method | Endpoint              | Description                                        |
+|--------|-----------------------|----------------------------------------------------|
+| GET    | `/api/my-profile`     | Get user profile                                    |
+| POST   | `/api/my-profile`     | Create/update profile                               |
+| PUT    | `/api/my-profile`     | Update existing profile                             |
 
-| Method | Endpoint              | Access                           | Description                    |
-|--------|-----------------------|----------------------------------|--------------------------------|
-| POST   | `/api/members/me`     | `ROLE_MEMBER`                    | Create own profile             |
-| GET    | `/api/members/me`     | `ROLE_MEMBER`                    | View own profile               |
-| GET    | `/api/members`        | All authenticated                | List profiles (role-filtered)  |
-| GET    | `/api/members/{id}`   | All authenticated                | Get profile by ID              |
-| POST   | `/api/members`        | `ROLE_ADMIN`                     | Create a profile (admin)       |
-| PUT    | `/api/members/{id}`   | Owner / Manager / Admin          | Update a profile               |
-| DELETE | `/api/members/{id}`   | `ROLE_ADMIN`                     | Delete a profile               |
+### Admin (`/api/admin`) — Admin Only
+| Method | Endpoint                 | Description                                      |
+|--------|--------------------------|--------------------------------------------------|
+| GET    | `/api/admin/students`     | Get all students                                 |
+| GET    | `/api/admin/audit-logs`   | Get audit logs                                   |
+| GET    | `/api/admin/key-info`     | Get encryption key information                    |
+| POST   | `/api/admin/key-rotate`    | Rotate encryption key                           |
+| POST   | `/api/admin/key-backup`    | Backup encryption key                           |
 
-### Admin (`/api/admin`) — `ROLE_ADMIN` Only
+### MFA (`/api/mfa`) — Authenticated
+| Method | Endpoint                 | Description                                      |
+|--------|--------------------------|--------------------------------------------------|
+| POST   | `/api/mfa/setup`          | Setup MFA (QR code generation)                 |
+| POST   | `/api/mfa/verify-setup`   | Verify and enable MFA                           |
+| POST   | `/api/mfa/verify`         | Verify MFA token during login                    |
+| GET    | `/api/mfa/status`         | Get MFA status                                 |
 
-| Method | Endpoint                 | Description              |
-|--------|--------------------------|--------------------------|
-| GET    | `/api/admin/users`       | List all users           |
-| GET    | `/api/admin/users/{id}`  | Get user by ID           |
-| PUT    | `/api/admin/assign-role` | Assign role to a user    |
-| GET    | `/api/admin/audit-logs`  | View all audit logs      |
+### Compliance (`/api/compliance`) — Authenticated
+| Method | Endpoint                      | Description                                          |
+|--------|-------------------------------|------------------------------------------------------|
+| GET    | `/api/compliance/retention-policies` | Get data retention policies                        |
+| POST   | `/api/compliance/consent`             | Record user consent                              |
+| GET    | `/api/compliance/consent`             | Get user consents                               |
+| POST   | `/api/compliance/data-request`         | Create data subject request                     |
+| GET    | `/api/compliance/export-data`          | Export user data (GDPR)                       |
+| POST   | `/api/compliance/delete-data`          | Delete user data (right to be forgotten)       |
+| GET    | `/api/compliance/report`               | Get compliance report (admin only)             |
 
 ---
 
-## 📁 Folder Structure
+## 📁 Project Structure
 
 ```
 SIDMS/
-├── pom.xml                              # Maven project configuration
-├── mvnw / mvnw.cmd                      # Maven Wrapper
-├── src/
-│   └── main/
-│       ├── java/com/sidms/
-│       │   ├── SidmsApplication.java    # Application entry point
-│       │   ├── config/
-│       │   │   ├── CorsConfig.java      # CORS configuration
-│       │   │   ├── DataLoader.java      # Seed data on first run
-│       │   │   ├── OpenApiConfig.java   # Swagger/OpenAPI setup
-│       │   │   └── SecurityConfig.java  # Spring Security filter chain
-│       │   ├── controller/
-│       │   │   ├── AuthController.java          # Registration, login, OTP, email verify
-│       │   │   ├── MemberProfileController.java # Profile CRUD with RBAC
-│       │   │   └── AdminController.java         # Admin operations & audit logs
-│       │   ├── dto/                     # Request/Response data transfer objects
-│       │   ├── entity/                  # JPA entities (User, Otp, MemberProfile, etc.)
-│       │   ├── exception/              # Custom exceptions & global handler
-│       │   ├── repository/             # Spring Data JPA repositories
-│       │   ├── security/
-│       │   │   ├── JwtAuthenticationFilter.java  # JWT validation filter
-│       │   │   ├── JwtService.java               # JWT creation & parsing
-│       │   │   └── CustomUserDetailsService.java # User loading for Spring Security
-│       │   ├── service/                # Business logic layer
-│       │   │   ├── AuthService.java
-│       │   │   ├── MemberProfileService.java
-│       │   │   ├── OtpService.java
-│       │   │   ├── EmailService.java
-│       │   │   ├── AuditLogService.java
-│       │   │   ├── UserService.java
-│       │   │   └── VerificationTokenService.java
-│       │   └── util/
-│       │       └── EncryptionService.java  # AES-256-GCM encrypt/decrypt
-│       └── resources/
-│           └── application.yml          # Application configuration
+├── sidms-python-backend/                    # Backend Application
+│   ├── app.py                             # Main Flask application
+│   ├── config/
+│   │   └── database.py                    # MongoDB connection
+│   ├── models/
+│   │   ├── user.py                        # User model
+│   │   ├── member_profile.py               # Member profile with encryption
+│   │   └── audit_log.py                  # Audit logging
+│   ├── routes/
+│   │   ├── auth.py                       # Authentication routes
+│   │   ├── members.py                    # Member management
+│   │   ├── admin.py                      # Admin operations
+│   │   ├── mfa.py                        # Multi-factor authentication
+│   │   └── compliance.py                 # GDPR compliance
+│   ├── services/
+│   │   ├── auth_service.py               # Authentication logic
+│   │   ├── otp_service.py                # OTP handling
+│   │   └── email_service.py              # Email notifications
+│   ├── utils/
+│   │   ├── encryption.py                 # AES-256 encryption service
+│   │   ├── key_manager.py                # Key management system
+│   │   ├── mfa_service.py                # MFA service
+│   │   ├── compliance_service.py          # GDPR compliance
+│   │   └── validators.py                 # Input validation
+│   ├── middleware/
+│   │   └── auth.py                      # JWT middleware
+│   ├── compliance/                        # Compliance directory
+│   │   ├── GDPR_COMPLIANCE.md            # Compliance documentation
+│   │   ├── user_consents.json             # User consent records
+│   │   ├── retention_policies.json        # Data retention policies
+│   │   └── data_subject_requests.json     # GDPR requests
+│   ├── keys/                             # Key storage directory
+│   │   ├── current_key.json               # Current encryption key
+│   │   ├── key_history.json              # Key operation history
+│   │   └── backup_key_*.json             # Key backups
+│   ├── backup_codes/                      # MFA backup codes
+│   ├── ssl/                             # SSL certificates
+│   ├── requirements.txt                   # Python dependencies
+│   └── .env                             # Environment variables
 │
-├── sidms-frontend/
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── index.html
-│   └── src/
-│       ├── main.jsx                     # React entry point
-│       ├── App.jsx                      # Root component & routing
-│       ├── context/
-│       │   └── AuthContext.jsx          # Authentication state management
-│       ├── components/
-│       │   └── ProtectedRoute.jsx       # Route guard (role-based)
-│       ├── pages/
-│       │   ├── Register.jsx             # User registration page
-│       │   ├── VerifyEmail.jsx          # Email verification handler
-│       │   ├── Login.jsx                # Login page
-│       │   ├── OtpVerification.jsx      # OTP input page
-│       │   ├── Dashboard.jsx            # User dashboard
-│       │   └── ProfileForm.jsx          # Profile creation/editing
-│       └── utils/
-│           └── apiClient.js             # Centralized API client
+├── sidms-frontend/                        # Frontend Application
+│   ├── public/
+│   │   └── index.html                   # Main HTML file
+│   ├── src/
+│   │   ├── components/                   # Reusable components
+│   │   │   ├── Header.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   └── Loading.jsx
+│   │   ├── pages/                        # Page components
+│   │   │   ├── Login.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   ├── MemberProfile.jsx
+│   │   │   ├── AuditLogs.jsx
+│   │   │   └── Compliance.jsx
+│   │   ├── utils/                        # Utility functions
+│   │   │   └── apiClient.js              # API client configuration
+│   │   ├── hooks/                        # Custom React hooks
+│   │   ├── styles/                       # CSS files
+│   │   │   └── AdminDashboard.css
+│   │   ├── App.jsx                       # Main App component
+│   │   └── main.jsx                      # Entry point
+│   ├── package.json                       # Dependencies
+│   └── vite.config.js                    # Vite configuration
+│
+├── README.md                              # This file
+└── LICENSE                               # MIT License
 ```
 
 ---
 
-## 🔮 Future Enhancements
+## 🔐 Security Implementation
 
-- [ ] **Account Lockout** — Lock accounts after repeated failed login attempts
-- [ ] **Rate Limiting** — Throttle API requests to prevent brute-force attacks
-- [ ] **Refresh Tokens** — Implement token refresh for seamless session management
-- [ ] **Cloud Deployment** — Docker containerization and deployment to AWS / Azure / GCP
-- [ ] **Password Reset** — Self-service password recovery via email
-- [ ] **Two-Factor App Support** — TOTP-based MFA via authenticator apps (Google Authenticator, Authy)
-- [ ] **Admin Dashboard** — Web-based admin panel for user and audit log management
+### 🔑 Key Management System
+- **Automated Key Rotation** — Schedule-based key updates
+- **Secure Key Storage** — Encrypted file-based storage
+- **Key Versioning** — Track key history and versions
+- **Backup & Recovery** — Automated key backup system
+- **Audit Trail** — Complete key operation logging
+
+### 🛡️ Encryption Implementation
+```python
+# AES-256 Encryption Example
+from utils.encryption import encryption_service
+
+# Encrypt sensitive data
+encrypted_data = encryption_service.encrypt_field("sensitive_info")
+
+# Decrypt sensitive data
+decrypted_data = encryption_service.decrypt_field(encrypted_data)
+```
+
+### 📱 MFA Implementation
+```python
+# TOTP Setup
+from utils.mfa_service import mfa_service
+
+# Generate secret and QR code
+secret = mfa_service.generate_secret()
+qr_data = mfa_service.generate_qr_code(email, secret)
+
+# Verify TOTP token
+is_valid = mfa_service.verify_token(secret, user_token)
+```
+
+### 📋 Compliance Implementation
+```python
+# GDPR Compliance
+from utils.compliance_service import compliance_service
+
+# Record consent
+compliance_service.record_consent(user_id, consent_type, True)
+
+# Export user data
+user_data = compliance_service.export_user_data(user_id)
+
+# Delete user data (right to be forgotten)
+compliance_service.delete_user_data(user_id, "User request")
+```
+
+---
+
+## 🎯 Security Best Practices Implemented
+
+### ✅ Authentication Security
+- **Strong Password Policies** — Enforced password complexity
+- **Multi-Factor Authentication** — TOTP-based 2FA
+- **Secure Session Management** — JWT with proper expiration
+- **Rate Limiting** — Prevent brute force attacks
+- **Account Lockout** — After failed attempts
+
+### ✅ Data Protection
+- **Encryption at Rest** — AES-256 for sensitive data
+- **Encryption in Transit** — TLS/SSL for all communications
+- **Key Management** — Secure key storage and rotation
+- **Data Minimization** — Only collect necessary data
+- **Secure Backup** — Encrypted backup procedures
+
+### ✅ Compliance & Privacy
+- **GDPR Compliant** — Full regulation implementation
+- **Consent Management** — Granular consent tracking
+- **Data Subject Rights** — Access, portability, deletion
+- **Audit Trail** — Complete activity logging
+- **Privacy by Design** — Built-in privacy controls
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under **MIT License** — see [LICENSE](LICENSE) file for details.
+
+---
+
+## 🏆 Project Achievements
+
+### ✅ Security Features Completed
+- [x] **AES-256 Encryption** — Field-level data encryption
+- [x] **Multi-Factor Authentication** — TOTP-based 2FA
+- [x] **Secure Key Management** — Rotation and backup
+- [x] **Comprehensive Audit Trail** — Complete activity logging
+- [x] **Role-Based Access Control** — Admin/user separation
+- [x] **HTTPS/SSL Support** — Secure data transmission
+- [x] **Input Validation** — Comprehensive sanitization
+- [x] **Security Headers** — XSS and CSRF protection
+
+### ✅ Compliance Features Completed
+- [x] **GDPR Compliance** — Full regulation implementation
+- [x] **Data Subject Rights** — Access, portability, erasure
+- [x] **Consent Management** — Granular consent tracking
+- [x] **Data Retention Policies** — Automated cleanup
+- [x] **Compliance Reporting** — Automated status reports
+- [x] **Privacy Controls** — Built-in privacy features
 
 ---
 
 <p align="center">
-  Built with ❤️ using <strong>Spring Boot</strong> and <strong>React</strong>
+  Built with ❤️ using <strong>Python Flask</strong> and <strong>React</strong>
+</p>
+
+<p align="center">
+  🛡️ <strong>Enterprise-Grade Security & Compliance</strong> 🛡️
 </p>
